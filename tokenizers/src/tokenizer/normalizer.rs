@@ -840,6 +840,31 @@ impl NormalizedString {
         self
     }
 
+    pub fn lstriponce(&mut self) -> &mut Self {
+        let leading_spaces = 1;
+        let trailing_spaces = 0;
+
+        if leading_spaces > 0 {
+            let count = self.get().chars().count();
+            let transformation = self
+                .normalized
+                .chars()
+                .enumerate()
+                .filter_map(|(i, c)| {
+                    if i < leading_spaces || i >= count - trailing_spaces {
+                        None
+                    } else if i == self.len() - trailing_spaces - 1 {
+                        Some((c, -(trailing_spaces as isize)))
+                    } else {
+                        Some((c, 0))
+                    }
+                })
+                .collect::<Vec<_>>();
+            self.transform(transformation, leading_spaces);
+        }
+        self
+    }
+
     /// Returns the length of the normalized string (counting chars not bytes)
     pub fn len(&self) -> usize {
         self.normalized.len()
