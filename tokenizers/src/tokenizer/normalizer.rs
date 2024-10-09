@@ -542,6 +542,24 @@ impl NormalizedString {
         self
     }
 
+    /// Lowercase
+    pub fn lowercase_first(&mut self) -> &mut Self {
+        let mut new_chars: Vec<(char, isize)> = vec![];
+        let mut i = 0;
+        self.for_each(|c| {
+            if i == 0 {
+                c.to_lowercase().enumerate().for_each(|(index, c)| {
+                    new_chars.push((c, isize::from(index > 0)));
+                })
+            } else {
+                new_chars.push((c, isize::from(0 > 0)));
+            }
+            i += 1;
+        });
+        self.transform(new_chars, 0);
+        self
+    }
+
     /// Uppercase
     pub fn uppercase(&mut self) -> &mut Self {
         let mut new_chars: Vec<(char, isize)> = vec![];

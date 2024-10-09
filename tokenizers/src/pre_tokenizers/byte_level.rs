@@ -1,6 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use crate::utils::SysRegex;
+use crate::NormalizedString;
 use serde::{Deserialize, Serialize};
 
 use crate::tokenizer::{
@@ -122,7 +123,12 @@ impl PreTokenizer for ByteLevel {
                 normalized.prepend(" ");
             }
             if self.use_regex {
-                normalized.split(re_ref, SplitDelimiterBehavior::Isolated)
+                Ok(normalized
+                    .split(re_ref, SplitDelimiterBehavior::Isolated)
+                    .unwrap()
+                    .iter()
+                    .map(|x: &NormalizedString| x.clone().lstrip().lowercase_first().clone())
+                    .collect::<Vec<NormalizedString>>())
             } else {
                 Ok(vec![normalized])
             }
