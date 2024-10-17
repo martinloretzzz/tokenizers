@@ -560,6 +560,22 @@ impl NormalizedString {
         self
     }
 
+    pub fn remove_suffix(&mut self, suffix: &str) -> &mut Self {
+        let suffix_length = suffix.len();
+        if !self.normalized.ends_with(suffix) || self.normalized.len() <= suffix_length + 1 {
+            return self;
+        }
+
+        let mut chars: Vec<(char, isize)> = self.normalized.chars().map(|c| (c, 0)).collect();
+        chars.truncate(chars.len() - suffix_length);
+
+        let last_index = chars.len() - 1;
+        chars[last_index] = (chars[last_index].0, -(suffix_length as isize));
+
+        self.transform(chars, 0);
+        self
+    }
+
     /// Uppercase
     pub fn uppercase(&mut self) -> &mut Self {
         let mut new_chars: Vec<(char, isize)> = vec![];

@@ -264,6 +264,8 @@ fn main() -> Result<()> {
         "Ń",
     ];
 
+    // cargo run --example bpe
+
     let vocab_size: usize = 50000 + 257;
 
     let initial_tokens = initial_vocab

@@ -127,7 +127,14 @@ impl PreTokenizer for ByteLevel {
                     .split(re_ref, SplitDelimiterBehavior::Isolated)
                     .unwrap()
                     .iter()
-                    .map(|x: &NormalizedString| x.clone().lstriponce().lowercase_first().clone())
+                    .map(|x: &NormalizedString| {
+                        x.clone()
+                            .lstriponce()
+                            .lowercase_first()
+                            .remove_suffix("s")
+                            .remove_suffix("ed")
+                            .clone()
+                    })
                     .collect::<Vec<NormalizedString>>())
             } else {
                 Ok(vec![normalized])
